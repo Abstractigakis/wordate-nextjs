@@ -22,47 +22,14 @@ const Play: FC<IPlayProps> = ({ faunaUser }) => {
   const faunaPuzzlesQuery = useFaunaPuzzlesQuery(dateToPuzzleId(selectedDate));
   const faunaPuzzles = faunaPuzzlesQuery.data;
 
-  console.log({ faunaPuzzles });
+  const pastDate = selectedDate < DAY_ZERO;
+  const futureDate = selectedDate > TODAY;
+  const validDate = !futureDate && !pastDate;
 
-  if (selectedDate < DAY_ZERO) {
-    return (
-      <div className="grid place-items-center">
-        <GameControllerFirstRow
-          faunaUser={faunaUser}
-          viewState={viewState}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          modalState={calendarOpen}
-        />
-        <PastPuzzle
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
-      </div>
-    );
-  }
-
-  if (selectedDate > TODAY) {
-    return (
-      <div className="grid place-items-center">
-        <GameControllerFirstRow
-          faunaUser={faunaUser}
-          viewState={viewState}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-          modalState={calendarOpen}
-        />
-        <FuturePuzzle
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
-      </div>
-    );
-  }
-
-  if (faunaPuzzlesQuery.status === "loading") return <PageLoading isLoading />;
-  else if (faunaPuzzlesQuery.status === "success")
-    return (
+  return (
+    <>
+      <PageLoading isLoading={faunaPuzzlesQuery.status === "loading"} />
+      {faunaPuzzlesQuery.status === "success"}
       <div className="grid place-items-center">
         <GameControllerFirstRow
           faunaUser={faunaUser}
@@ -72,32 +39,55 @@ const Play: FC<IPlayProps> = ({ faunaUser }) => {
           modalState={calendarOpen}
         />
 
-        <GameControllerSecondRow
-          faunaPuzzles={faunaPuzzles}
-          puzzleLen={puzzleLen}
-          setPuzzleLen={setPuzzleLen}
-        />
-
-        {view === "game" && (
-          <Game
-            faunaPuzzle={faunaPuzzles[puzzleLen - 4]}
-            faunaUser={faunaUser}
-            setView={setView}
+        {faunaPuzzlesQuery.status === "success" && (
+          <GameControllerSecondRow
+            faunaPuzzles={faunaPuzzles}
+            puzzleLen={puzzleLen}
+            setPuzzleLen={setPuzzleLen}
           />
         )}
 
-        {view === "stats" && (
-          <Stats
-            faunaPuzzle={faunaPuzzles[puzzleLen - 4]}
-            faunaUser={faunaUser}
+        {pastDate && (
+          <PastPuzzle
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        )}
+
+        {futureDate && (
+          <FuturePuzzle
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        )}
+
+        {faunaPuzzlesQuery.status === "success" &&
+          validDate &&
+          view === "game" && (
+            <Game
+              faunaPuzzle={faunaPuzzles[puzzleLen - 4]}
+              faunaUser={faunaUser}
+              setView={setView}
+            />
+          )}
+
+        {faunaPuzzlesQuery.status === "success" &&
+          validDate &&
+          view === "stats" && (
+            <Stats
+              faunaPuzzle={faunaPuzzles[puzzleLen - 4]}
+              faunaUser={faunaUser}
+            />
+          )}
+
+        {faunaPuzzlesQuery.status === "error" && (
+          <GenericError
+            message={JSON.stringify(faunaPuzzlesQuery.error, null, 2)}
           />
         )}
       </div>
-    );
-  else
-    return (
-      <GenericError message={JSON.stringify(faunaPuzzlesQuery, null, 2)} />
-    );
+    </>
+  );
 };
 
 export default Play;

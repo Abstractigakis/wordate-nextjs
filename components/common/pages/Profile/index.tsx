@@ -1,3 +1,4 @@
+import PlayButton from "@components/app/PlayButton";
 import LogoutButton from "@components/common/Auth/LogoutButton";
 import DisplayField from "@components/common/Fields/DisplayStringField/DisplayField";
 import UserImage from "@components/common/Fields/Images/UserImage";
@@ -24,8 +25,9 @@ const Profile: FC<IProfileProps> = ({ faunaUser }) => {
       </div>
 
       <ChangeDisplayName faunaUser={faunaUser} />
-      <div>
+      <div className="grid place-items-center">
         <LogoutButton />
+        <PlayButton />
       </div>
     </div>
   );
