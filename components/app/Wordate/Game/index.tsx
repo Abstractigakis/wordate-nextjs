@@ -63,7 +63,7 @@ const Game: FC<IGameProps> = ({ faunaPuzzle, faunaUser, setView }) => {
   const insertSolveMutation = useMutation(postSolve, {
     onSuccess: (data: IFaunaSolve) => {
       setSolveObj(data);
-      queryClient.invalidateQueries(["get-puzzle", faunaPuzzle.date]);
+      queryClient.invalidateQueries(["get-puzzles", faunaPuzzle.date]);
       queryClient.invalidateQueries(["get-self", faunaUser.email]);
     },
   });
