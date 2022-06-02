@@ -1,28 +1,22 @@
 import MyDatePicker from "@components/app/MyDatePicker";
 import Button from "@components/common/Button";
-import { IFaunaPuzzle, IFaunaUser } from "@lib/faunadb/types";
+import { IFaunaUser } from "@lib/faunadb/types";
 import React, { Dispatch, FC, SetStateAction } from "react";
 
 export interface IGameControllerProps {
   faunaUser: IFaunaUser;
-  faunaPuzzles: IFaunaPuzzle[];
   viewState: ["game" | "stats", Dispatch<SetStateAction<"game" | "stats">>];
   selectedDate: Date;
   setSelectedDate: Dispatch<SetStateAction<Date>>;
   modalState: [boolean, Dispatch<SetStateAction<boolean>>];
-  puzzleLen: number;
-  setPuzzleLen: Dispatch<SetStateAction<number>>;
 }
 
 const GameController: FC<IGameControllerProps> = ({
   faunaUser,
-  faunaPuzzles,
   viewState,
   selectedDate,
   setSelectedDate,
   modalState,
-  puzzleLen,
-  setPuzzleLen,
 }) => {
   const [view, setView] = viewState;
   return (
@@ -73,16 +67,6 @@ const GameController: FC<IGameControllerProps> = ({
           setSelectedDate={setSelectedDate}
           modalState={modalState}
         />
-      </div>
-      <div className="flex justify-center m-2">
-        {[4, 5, 6].map((n: number) => (
-          <Button
-            key={n}
-            type={n === puzzleLen ? "green" : "secondary"}
-            onClick={() => setPuzzleLen(n)}
-            text={`${faunaPuzzles[n - 4].wi} ${faunaPuzzles[n - 4].wj}`}
-          />
-        ))}
       </div>
     </div>
   );
