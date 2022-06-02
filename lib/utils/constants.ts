@@ -15,7 +15,7 @@ export const MONTHS = [
 ];
 export const DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-export const DAY_ZERO = new Date(2022, 0, 1);
+export const DAY_ZERO = new Date(2022, 5, 1);
 export const TODAY = new Date();
 export const PREMIUM_DAY_ZERO = new Date(
   TODAY.getFullYear(),

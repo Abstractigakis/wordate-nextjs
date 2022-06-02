@@ -21,6 +21,7 @@ import HowToPlay from "../Messages/HowToPlay";
 import KeyboardLetter from "../KeyboardLetter";
 import GameStateLetter from "../GameStateLetter";
 import GameHud from "../GameHub";
+import { shootFireworks } from "@lib/fireworks";
 
 export interface IGameProps {
   faunaPuzzle: IFaunaPuzzle;
@@ -111,6 +112,8 @@ const Game: FC<IGameProps> = ({ faunaPuzzle, faunaUser, setView }) => {
 
   const wordationWinAnim = (newWord: string) => {
     toast.success(`WINNER!`);
+
+    shootFireworks({ duration: 3000 });
 
     setWinning(false);
     setTimeout(() => {

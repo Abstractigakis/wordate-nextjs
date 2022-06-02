@@ -13,7 +13,7 @@ const Stats = ({ faunaPuzzle, faunaUser }: IPuzzleProps) => {
       <div className="mt-4 p-2 w-full align-center max-w-sm max-h-1/6">
         <Leaderboard faunaPuzzle={faunaPuzzle} faunaUser={faunaUser} />
         <div className="mt-4">
-          <Histogram faunaPuzzle={faunaPuzzle} />
+          {/* <Histogram faunaPuzzle={faunaPuzzle} /> */}
         </div>
       </div>
     </div>
