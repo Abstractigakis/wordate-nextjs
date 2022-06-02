@@ -1,0 +1,35 @@
+type users {
+  name: String!
+  email: String!
+  image: String
+  displayName: String
+  solves: [solves] @relation(name: "solve_user")
+}
+
+type puzzles {
+  wi: String!
+  wj: String!
+  i: Int!
+  j: Int!
+  g: Int!
+  date: String!
+  solves: [solves] @relation(name: "solve_puzzle")
+  prod: Boolean!
+}
+
+type solves {
+  gameStack: [String]!
+  score: Int!
+  wordationStack: [String]!
+  wordations: Int!
+  errorStack: [String]!
+  errors: Int!
+  user: users! @relation(name: "solve_user")
+  puzzle: puzzles! @relation(name: "solve_puzzle")
+}
+
+type Query {
+  puzzlesByDate(date: String!): [puzzles]
+  puzzlesByProd(prod: Boolean!): [puzzles]
+  userByEmail(email: String!): [users]
+}

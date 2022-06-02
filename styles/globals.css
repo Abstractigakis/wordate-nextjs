@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@keyframes mine {
+  0% { transform: rotateX(0deg); }
+  45% { transform: rotateX(90deg); }
+  55% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0deg); }
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
+body {
+  font-family: "VT323",
+  monospace;
+}
