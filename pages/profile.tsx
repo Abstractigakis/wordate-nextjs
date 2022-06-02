@@ -13,11 +13,15 @@ const ProfilePage: NextPage<IProfilePageProps> = ({ data }) => {
   const { authUserEmail } = data;
   const faunaUserQuery = useFaunaUserQuery(authUserEmail);
   const faunaUser = faunaUserQuery.data;
-  if (faunaUserQuery.status === "loading") return <PageLoading isLoading />;
-  else if (faunaUserQuery.status === "success")
-    return <Profile faunaUser={faunaUser} />;
-  else
-    return <GenericError message={JSON.stringify(faunaUserQuery, null, 2)} />;
+  return (
+    <>
+      <PageLoading isLoading={faunaUserQuery.status === "loading"} />
+      {faunaUserQuery.status === "success" && <Profile faunaUser={faunaUser} />}
+      {faunaUserQuery.status === "error" && (
+        <GenericError message={JSON.stringify(faunaUserQuery.error, null, 2)} />
+      )}
+    </>
+  );
 };
 
 export default ProfilePage;
