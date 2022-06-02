@@ -80,11 +80,11 @@ const Play: FC<IPlayProps> = ({ faunaUser }) => {
             />
           )}
 
-        {faunaPuzzlesQuery.status === "error" && (
+        {/* {faunaPuzzlesQuery.status === "error" && (
           <GenericError
             message={JSON.stringify(faunaPuzzlesQuery.error, null, 2)}
           />
-        )}
+        )} */}
       </div>
     </>
   );
