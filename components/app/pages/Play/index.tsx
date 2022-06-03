@@ -68,6 +68,7 @@ const Play: FC<IPlayProps> = ({ faunaUser }) => {
               faunaPuzzle={faunaPuzzles[puzzleLen - 4]}
               faunaUser={faunaUser}
               setView={setView}
+              setCalendarOpen={calendarOpen[1]}
             />
           )}
 

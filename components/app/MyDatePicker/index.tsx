@@ -91,7 +91,7 @@ const MyDatePicker: FC<IMyDatePickerProps> = ({
   //   };
 
   const isSolved = (date: number, puzzleLen: number): boolean => {
-    if (!faunaUser.solves || faunaUser.solves.data.length) return false;
+    if (!faunaUser.solves || faunaUser.solves.data.length === 0) return false;
     const currDate = new Date(
       datepickerHeaderDate.getFullYear(),
       datepickerHeaderDate.getMonth(),

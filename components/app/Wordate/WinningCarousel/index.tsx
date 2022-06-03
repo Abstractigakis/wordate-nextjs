@@ -5,6 +5,7 @@ import React, { FC, useState } from "react";
 import { IFaunaPuzzle, IFaunaSolve, IFaunaUser } from "@lib/faunadb/types";
 import Congrats from "../Congrats";
 import Final from "../Final";
+import Leaderboard from "../Leaderboard";
 // import Premium from "../Premium";
 
 export interface IWinningCarousel {
@@ -13,6 +14,7 @@ export interface IWinningCarousel {
   faunaPuzzle: IFaunaPuzzle;
   restart: Function;
   setView: Function;
+  setCalendarOpen: Function;
 }
 
 const WinningCarousel: FC<IWinningCarousel> = ({
@@ -21,31 +23,26 @@ const WinningCarousel: FC<IWinningCarousel> = ({
   faunaPuzzle,
   restart,
   setView,
+  setCalendarOpen,
 }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   const winnerModalState = useState<boolean>(true);
 
-  // const decrementWinnerModalStatus = () => {
-  //   setModalIndex((prev: number) => {
-  //     if (prev === null) return prev;
-  //     else if (winnerStatuses[prev] === "ads") setAdsPlayed(true);
-
-  //     return (prev - 1) % winnerStatuses.length;
-  //   });
-  // };
-
-  // const incrementWinnerModalStatus = () => {
-  //   setModalIndex((prev: number) => {
-  //     if (prev === null) return prev;
-  //     if (winnerStatuses[prev] === "ads") setAdsPlayed(true);
-  //     return (prev + 1) % winnerStatuses.length;
-  //   });
-  // };
-
   let carouselComponenets = [
-    <Congrats solveObj={solveObj} key="congrats" />,
-    <Final key="final" restart={restart} setView={setView} />,
+    <Congrats key="congrats" solveObj={solveObj} />,
+    <Leaderboard
+      key="leaderboard"
+      faunaPuzzle={faunaPuzzle}
+      faunaUser={faunaUser}
+    />,
+    <Final
+      key="final"
+      restart={restart}
+      setView={setView}
+      setCalendarOpen={setCalendarOpen}
+      setModalOpen={winnerModalState[1]}
+    />,
   ];
 
   const stepBack = () => {
