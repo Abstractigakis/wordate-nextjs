@@ -108,6 +108,7 @@ const MyDatePicker: FC<IMyDatePickerProps> = ({
   };
 
   const requiresPremium = (date: number): boolean => {
+    return false;
     const currDate = new Date(
       datepickerHeaderDate.getFullYear(),
       datepickerHeaderDate.getMonth(),
