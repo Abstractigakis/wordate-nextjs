@@ -209,19 +209,16 @@ const HowToPlay = () => {
             />
           </svg>
         </div>
-        <div className="m-2 grid place-items-center">
+        <div className="m-2">
           There are new puzzles every day, and leaderboards for each puzzle
-          ranked by lowest score, and first to complete
+          ranked by lowest <span className="text-yellow-300">wordations</span>,
+          and first to complete
         </div>
-        <div className="m-2 flex justify-center">
-          <p className="px-1 text-yellow-300">score</p> ={" "}
-          <p className="px-1 text-red-600">errors</p> +{" "}
-          <p className="px-1 text-green-600">wordations</p>
-        </div>
+
         <div className="m-2 grid place-items-center">
-          If you are the first to complete the puzzle in the theoretical minimum
-          wordations, without mistakes, you will be cemented in permanent glory
-          😎
+          In other words, If you are the first to complete the puzzle in the
+          theoretical minimum wordations, without mistakes, you will be cemented
+          in permanent glory 😎
         </div>
       </div>
     </div>

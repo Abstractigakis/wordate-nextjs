@@ -50,7 +50,10 @@ const Leaderboard: FC<ILeaderboardProps> = ({ faunaPuzzle, faunaUser }) => {
                 isMe={isMe}
                 text={solve.user.displayName || solve.user.name}
               />
-              <LeaderboardCell isMe={isMe} text={solve.wordationStack.length} />
+              <LeaderboardCell
+                isMe={isMe}
+                text={solve.wordationStack.length - 1}
+              />
             </div>
           );
         })}

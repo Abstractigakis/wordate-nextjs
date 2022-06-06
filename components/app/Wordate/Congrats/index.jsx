@@ -8,11 +8,11 @@ const Congrats = ({ solveObj }) => {
   return (
     <div>
       <Title text={"⚡🔥 Congratulations 🔥⚡"} />
-      <div className="m-2">
+      <div className="m-2 grid place-items-center">
         You won in{" "}
-        <span className="text-yellow-300">{s.wordations} wordations</span>, with{" "}
-        <span className="text-red-600">{s.errors} errors</span> for a{" "}
-        <span className="text-green-600">total score of {s.score}</span>
+        <span className="text-green-600">
+          {s.wordationStack.length - 1} wordations
+        </span>
       </div>
       <div className="grid place-items-center text-lg">Your solve:</div>
       <div className="flex flex-wrap justify-center overflow-y-scroll max-h-60">
