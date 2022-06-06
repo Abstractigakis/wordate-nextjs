@@ -66,7 +66,6 @@ const Game: FC<IGameProps> = ({
       queryClient.invalidateQueries(["get-self", faunaUser.email]);
     },
   });
-  console.log({ wordationStack });
   const back = () => {
     setWordationStack((p) => {
       const newWordationStack = p.slice(0, -1);
@@ -163,7 +162,7 @@ const Game: FC<IGameProps> = ({
         firstWord={firstWord}
         finalWord={finalWord}
         scoring={scoring}
-        score={wordationStack.length}
+        score={wordationStack.length - 1}
       />
 
       {/* Game State */}
