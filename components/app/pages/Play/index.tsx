@@ -6,11 +6,15 @@ import PastPuzzle from "@components/app/Wordate/Messages/PastPuzzle";
 import Stats from "@components/app/Wordate/Stats";
 import GenericError from "@components/common/messages/GenericError";
 import PageLoading from "@components/common/PageLoading";
+import { IFaunaUser } from "@lib/faunadb/types";
 import { DAY_ZERO, TODAY } from "@lib/utils/constants";
 import { dateToPuzzleId } from "@lib/utils/dateHelpers";
 import { useFaunaPuzzlesQuery } from "hooks";
 import { FC, useState } from "react";
-import { IPlayProps } from "./types";
+
+export interface IPlayProps {
+  faunaUser: IFaunaUser;
+}
 
 const Play: FC<IPlayProps> = ({ faunaUser }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());

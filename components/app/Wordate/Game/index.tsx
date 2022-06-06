@@ -36,10 +36,6 @@ const Game: FC<IGameProps> = ({
   setView,
   setCalendarOpen,
 }) => {
-  const [score, setScore] = useState<number>(0);
-  const [wordations, setWordations] = useState<number>(0);
-  const [errors, setErrors] = useState<number>(0);
-  const [errorStack, setErrorStack] = useState<string[]>([]);
   const firstWord = faunaPuzzle.wi;
   const finalWord = faunaPuzzle.wj;
   const ALL_WORDS =
@@ -54,13 +50,9 @@ const Game: FC<IGameProps> = ({
   );
   const [badWord, setBadWord] = useState<boolean>(false);
   const [wordationStack, setWordationStack] = useState<string[]>([firstWord]);
-  const [gameStack, setFullGameStack] = useState<string[]>([firstWord]);
   const [solveObj, setSolveObj] = useState<IFaunaSolve | null>(null);
   const [disableUI, setDisableUI] = useState<boolean>(false);
-
-  const [erroring, setErroring] = useState<boolean>(true);
   const [scoring, setScoring] = useState<boolean>(true);
-  const [winning, setWinning] = useState<boolean>(true);
   const [showHints, setShowHints] = useState(true);
   const howToPlayState = useState<boolean>(false);
 
@@ -68,31 +60,19 @@ const Game: FC<IGameProps> = ({
 
   const insertSolveMutation = useMutation(postSolve, {
     onSuccess: (data: IFaunaSolve) => {
+      console.log({ data });
       setSolveObj(data);
       queryClient.invalidateQueries(["get-puzzles", faunaPuzzle.date]);
       queryClient.invalidateQueries(["get-self", faunaUser.email]);
     },
   });
-
-  const wordateWin = async () => {
-    const newSolveData: IFaunaSolveData = {
-      gameStack: [...gameStack],
-      score,
-      errorStack: [...errorStack],
-      errors,
-      wordationStack: [...wordationStack],
-      wordations,
-      userId: faunaUser._id,
-      puzzleId: faunaPuzzle._id,
-    };
-
-    insertSolveMutation.mutate(newSolveData);
-
-    // let newQuestWords4 = gameStack;
-    // newQuestWords4 = newQuestWords4.filter((w) => !ALL_WORDS.includes(w));
-    // newQuestWords4 = newQuestWords4.filter((w, index) => {
-    //   return newQuestWords4.indexOf(w) === index;
-    // });
+  console.log({ wordationStack });
+  const back = () => {
+    setWordationStack((p) => {
+      const newWordationStack = p.slice(0, -1);
+      setCurrWord(newWordationStack.slice(-1)[0]);
+      return newWordationStack;
+    });
   };
 
   const restart = () => {
@@ -101,77 +81,14 @@ const Game: FC<IGameProps> = ({
     setSelectedLetterIndex(null);
     setCurrWord(firstWord);
     setWordationStack([firstWord]);
-    setFullGameStack([firstWord]);
-    setErrorStack([]);
     setSolveObj(null);
     setScoring(true);
-    setErroring(true);
-    setScore(0);
-    setWordations(0);
-    setErrors(0);
   };
 
   useEffect(() => {
     restart();
     setCurrWord(firstWord);
   }, [firstWord]);
-
-  const wordationWinAnim = (newWord: string) => {
-    toast.success(`WINNER!`);
-
-    shootFireworks({ duration: 3000 });
-
-    setWinning(false);
-    setTimeout(() => {
-      setWinning(true);
-      setDisableUI(false);
-      setSelectedLetterIndex(null);
-      wordateWin();
-    }, 200);
-  };
-
-  const wordationScoreAnim = (newWord: string) => {
-    toast.success(`Score! ${newWord}`, {
-      duration: 1400,
-      position: "bottom-left",
-    });
-
-    setScoring(false);
-    setScore((p) => p + 1);
-
-    setWordations((p) => p + 1);
-    setTimeout(() => {
-      setScoring(true);
-      setDisableUI(false);
-      setSelectedLetterIndex(null);
-    }, 400);
-  };
-
-  const wordationErrorAnim = (newWord: string) => {
-    toast.error(`${newWord} not a word`, {
-      duration: 1400,
-      position: "bottom-right",
-    });
-
-    setErroring(false);
-    setErrors((p) => p + 1);
-    setScore((p) => p + 1);
-    setTimeout(() => {
-      setErroring(true);
-    }, 400);
-
-    setBadWord(true);
-    setErrorStack((wp) => [...wp, newWord]);
-    setTimeout(() => {
-      setWordationStack((w) => {
-        setCurrWord(w[w.length - 2]);
-        return w.slice(0, w.length - 1);
-      });
-      setBadWord(false);
-      setDisableUI(false);
-      setSelectedLetterIndex(null);
-    }, 1200);
-  };
 
   const isWord = (word: string): boolean => {
     return ALL_WORDS.includes(word.toUpperCase());
@@ -193,15 +110,49 @@ const Game: FC<IGameProps> = ({
     setDisableUI(true);
     setSelectedLetterIndex(null);
     setCurrWord(newWord);
+
     setWordationStack((w) => [...w, newWord]);
-    setFullGameStack((w) => [...w, newWord]);
 
     if (!isWord(newWord)) {
-      wordationErrorAnim(newWord);
+      setBadWord(true);
+      toast.error(`${newWord} not a word`, {
+        duration: 1400,
+        position: "bottom-right",
+      });
+      setTimeout(() => {
+        setWordationStack((w) => {
+          setCurrWord(w[w.length - 2]);
+          return w.slice(0, w.length - 1);
+        });
+        setBadWord(false);
+        setDisableUI(false);
+      }, 1200);
     } else {
-      wordationScoreAnim(newWord);
+      setScoring(false);
+      toast.success(`Score! ${newWord}`, {
+        duration: 1400,
+        position: "bottom-left",
+      });
+
+      setTimeout(() => {
+        setScoring(true);
+        setDisableUI(false);
+      }, 400);
+
       if (newWord === finalWord) {
-        wordationWinAnim(newWord);
+        toast.success(`WINNER!`);
+        shootFireworks({ duration: 3000 });
+
+        setTimeout(() => {
+          setDisableUI(false);
+          const newSolveData: IFaunaSolveData = {
+            wordationStack: [...wordationStack],
+            userId: faunaUser._id,
+            puzzleId: faunaPuzzle._id,
+          };
+
+          insertSolveMutation.mutate(newSolveData);
+        }, 1000);
       }
     }
   };
@@ -212,9 +163,7 @@ const Game: FC<IGameProps> = ({
         firstWord={firstWord}
         finalWord={finalWord}
         scoring={scoring}
-        erroring={erroring}
-        score={score}
-        errors={errors}
+        score={wordationStack.length}
       />
 
       {/* Game State */}
@@ -338,6 +287,29 @@ const Game: FC<IGameProps> = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            }
+          />
+
+          <Button
+            disabled={disableUI || wordationStack.length <= 1}
+            type="red"
+            onClick={() => back()}
+            text="Back"
+            svgEl={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"
                 />
               </svg>
             }

@@ -15,9 +15,7 @@ export const puzzleByDateQuery = gql`
           data {
             _id
             _ts
-            errors
-            score
-            wordations
+            wordationStack
             user {
               displayName
               name

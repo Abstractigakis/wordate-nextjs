@@ -11,11 +11,11 @@ const Leaderboard: FC<ILeaderboardProps> = ({ faunaPuzzle, faunaUser }) => {
   // sort solves
   let leaderboard = [...faunaPuzzle.solves.data];
   leaderboard.sort(function (a, b) {
-    if (a.score === b.score) {
+    if (a.wordationStack.length === b.wordationStack.length) {
       // time is only important when socre are the same
       return a._ts - b._ts;
     }
-    return a.score > b.score ? 1 : -1;
+    return a.wordationStack.length > b.wordationStack.length ? 1 : -1;
   });
 
   // only keep best soves for each user
@@ -36,9 +36,7 @@ const Leaderboard: FC<ILeaderboardProps> = ({ faunaPuzzle, faunaUser }) => {
       <Title text={"😎🚀 Leaderboard 🚀😎"} />
       <div className="m-1 p-1 grid grid-cols-5 border-b">
         <LeaderboardHeadingCell text={"Place"} />
-        <LeaderboardHeadingCell text={"Player"} />
-        <LeaderboardHeadingCell text={"Score"} />
-        <LeaderboardHeadingCell text={"Errors"} />
+        <LeaderboardHeadingCell text={"Player"} threeCols />
         <LeaderboardHeadingCell text={"Wordations"} />
       </div>
       <div className="overflow-y-scroll max-h-80">
@@ -48,12 +46,11 @@ const Leaderboard: FC<ILeaderboardProps> = ({ faunaPuzzle, faunaUser }) => {
             <div className="m-1 p-1 grid grid-cols-5 border-b" key={solve._id}>
               <LeaderboardCell isMe={isMe} text={i + 1} />
               <LeaderboardCell
+                threeCols
                 isMe={isMe}
                 text={solve.user.displayName || solve.user.name}
               />
-              <LeaderboardCell isMe={isMe} text={solve.score} />
-              <LeaderboardCell isMe={isMe} text={solve.errors} />
-              <LeaderboardCell isMe={isMe} text={solve.wordations} />
+              <LeaderboardCell isMe={isMe} text={solve.wordationStack.length} />
             </div>
           );
         })}
@@ -67,14 +64,19 @@ export default Leaderboard;
 export interface ILeaderboardCellProps {
   isMe: boolean;
   text: number | string;
+  threeCols?: boolean;
 }
 
-const LeaderboardCell: FC<ILeaderboardCellProps> = ({ isMe, text }) => {
+const LeaderboardCell: FC<ILeaderboardCellProps> = ({
+  isMe,
+  text,
+  threeCols,
+}) => {
   return (
     <div
       className={`grid place-items-center text-xs ${
         isMe ? "text-yellow-300" : null
-      }`}
+      } ${threeCols ? "col-span-3" : null}`}
     >
       {text}
     </div>
@@ -83,8 +85,20 @@ const LeaderboardCell: FC<ILeaderboardCellProps> = ({ isMe, text }) => {
 
 export interface ILeaderboardHeadingCellProps {
   text: string;
+  threeCols?: boolean;
 }
 
-const LeaderboardHeadingCell: FC<ILeaderboardHeadingCellProps> = ({ text }) => {
-  return <div className={`grid place-items-center text-xs`}>{text}</div>;
+const LeaderboardHeadingCell: FC<ILeaderboardHeadingCellProps> = ({
+  text,
+  threeCols,
+}) => {
+  return (
+    <div
+      className={`grid place-items-center text-xs ${
+        threeCols ? "col-span-3" : null
+      }`}
+    >
+      {text}
+    </div>
+  );
 };

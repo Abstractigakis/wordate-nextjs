@@ -29,35 +29,20 @@ export const updateUserMutation = gql`
 
 export const createSolveMutation = gql`
   mutation createSolve(
-    $errorStack: [String]!
-    $errors: Int!
-    $gameStack: [String]!
-    $score: Int!
     $wordationStack: [String]!
-    $wordations: Int!
     $userId: ID!
     $puzzleId: ID!
   ) {
     createSolves(
       data: {
-        errorStack: $errorStack
-        errors: $errors
-        score: $score
-        gameStack: $gameStack
         wordationStack: $wordationStack
-        wordations: $wordations
         user: { connect: $userId }
         puzzle: { connect: $puzzleId }
       }
     ) {
       _id
       _ts
-      errorStack
-      errors
-      score
-      gameStack
       wordationStack
-      wordations
       user {
         _id
         _ts
@@ -78,9 +63,7 @@ export const createSolveMutation = gql`
           data {
             _id
             _ts
-            errors
-            gameStack
-            score
+            wordationStack
             user {
               displayName
               name
