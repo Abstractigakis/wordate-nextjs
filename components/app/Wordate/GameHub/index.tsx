@@ -7,23 +7,19 @@ interface IGameHudProps {
   firstWord: string;
   finalWord: string;
   scoring: boolean;
-  erroring: boolean;
   score: number;
-  errors: number;
 }
 
 const GameHud: FC<IGameHudProps> = ({
   firstWord,
   finalWord,
   scoring,
-  erroring,
   score,
-  errors,
 }) => {
   return (
     <div className="flex justify-center border-b mb-2 pb-2">
       <Transition
-        show={scoring && erroring}
+        show={scoring}
         enter="transform transition duration-[400ms]"
         enterFrom="opacity-0 rotate-[-120deg] scale-50"
         enterTo="opacity-100 rotate-0 scale-100"
@@ -62,20 +58,6 @@ const GameHud: FC<IGameHudProps> = ({
       />
 
       <Defn word={finalWord} />
-
-      <Transition
-        show={erroring}
-        enter="transform transition duration-[400ms]"
-        enterFrom="opacity-0 rotate-[-120deg] scale-50"
-        enterTo="opacity-100 rotate-0 scale-100"
-        leave="transform duration-200 transition ease-in-out"
-        leaveFrom="opacity-100 rotate-0 scale-100 "
-        leaveTo="opacity-0 scale-95 "
-      >
-        <Button disabled type={"red"}>
-          Errors: {errors}
-        </Button>
-      </Transition>
     </div>
   );
 };

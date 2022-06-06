@@ -18,12 +18,7 @@ type puzzles {
 }
 
 type solves {
-  gameStack: [String]!
-  score: Int!
   wordationStack: [String]!
-  wordations: Int!
-  errorStack: [String]!
-  errors: Int!
   user: users! @relation(name: "solve_user")
   puzzle: puzzles! @relation(name: "solve_puzzle")
 }

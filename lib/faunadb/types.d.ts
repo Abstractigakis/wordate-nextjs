@@ -21,23 +21,13 @@ export interface IFaunaPuzzle {
 export interface IFaunaSolve {
   _ts: numer;
   _id: string;
-  gameStack: !string[];
-  score: !number;
   wordationStack: !string[];
-  wordations: !number;
-  errorStack: !string[];
-  errors: !number;
   user: !IFaunaUser;
   puzzle: !IFaunaPuzzle;
 }
 
 export interface IFaunaSolveData {
-  gameStack: !string[];
-  score: !number;
   wordationStack: !string[];
-  wordations: !number;
-  errorStack: !string[];
-  errors: !number;
   userId: !string;
   puzzleId: !string;
 }

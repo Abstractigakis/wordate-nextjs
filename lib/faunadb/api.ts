@@ -46,7 +46,7 @@ export const updateUser = async (newUser: IFaunaUser): Promise<IFaunaUser> => {
 export const createSolve = async (
   solveData: IFaunaSolveData
 ): Promise<IFaunaSolve> => {
-  console.debug(`GQL FAUNA REQUEST: createSolve ${solveData.score}`);
+  console.debug(`GQL FAUNA REQUEST: createSolve ${solveData.wordationStack}`);
   const res = await graphQLClient.request(createSolveMutation, solveData);
   return res;
 };
